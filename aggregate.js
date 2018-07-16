@@ -4,7 +4,7 @@
  */
 const fs = require('fs');
 
-const aggregate = () => {
+const aggregate = () => new Promise((resolve) => {
   const myReadStream = fs.createReadStream('/aggregate-gdp-population-js-problem-Ritam-majumdar/data/datafile.csv', 'utf8');
   const continentData = {};
   let i;
@@ -52,8 +52,10 @@ const aggregate = () => {
         continentData[continent[contIndex]].POPULATION_2012 += parseFloat(countryData[4]);
       }
     }
-    fs.writeFileSync('./output/output.json', JSON.stringify(continentData));
+    fs.writeFile('./output/output.json', JSON.stringify(continentData), () => {
+      resolve();
+    });
   });
-};
+});
 aggregate();
 module.exports = aggregate;
